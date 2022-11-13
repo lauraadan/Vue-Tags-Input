@@ -6,8 +6,6 @@
                 {{ tag }} <button @click="deleteTag(tag)" class="delete is-delete"></button>
             </div>
         </div>
-        <!-- El evento tipo submit se activa cuando el formulario es enviado -->
-        <!-- prevent para omitir el comportamiento por defecto del formulario, que proviene del nativo preventDefault() en js. Evita recargar la pagina-->
         <form @submit.prevent="handleSubmit">
             <input class="input" type="text" v-model="currentValue" @keydown="handleKeyDown"
                 placeholder="Write your tags..." />
@@ -18,40 +16,33 @@
 <script>
 
 export default {
-    // cada vez que haya un cambio (como que se agregue una new tag) vamos a devolver la lista de etiquetas
-    // emits onTagsChange regresa la lista de resultados (tags) para poder reutilizarlo de forma externa. Tambien se puede hacer con props
     emits: ['onTagsChange'],
     data() {
-        return { // regresamos nuestro objeto de estado
+        return {
             currentValue: '',
-            tags: [], // cada una de las etiquetas que vamos creando se van a agregar aqui y su vez, se van a renderizar dentro de la clase tags.
+            tags: [],
         }
     },
 
     methods: {
         handleKeyDown(e) {
-            // permite que cada tag sea un elemento unico y que al borrar un tag en el input, se vayan eliminando el resto de tags tambien
             if (e.key === "Backspace" && this.currentValue === '') {
-                this.tags.pop(); //eliminar el ultima etiqueta de nuestra lista 
+                this.tags.pop();
                 this.$emit('onTagsChange', this.tags);
             }
         },
         handleSubmit() {
-            if (this.currentValue !== '' && this.currentValue !== ' ') { // si - currentValue (es el valor del elemento actual) no es una string vacia y no empieza con un espaciador
-                // el metodo some comprueba si al menos un elemento del array cumple con la condicion implementada por la funcion proporcionada
-                const exist = this.tags.some(item => item === this.currentValue) // exist = un item es igual a un item actual (tag con mismo nombre)
-                if (!exist) { // si un tag NO ES IGUAL a otro tag...
-                    this.tags.push(this.currentValue) // añadir el valor del elemento actual a la array tags.
-                    this.currentValue = ''; // que se vacíe el input una vez enviado
+            if (this.currentValue !== '' && this.currentValue !== ' ') {
+                const exist = this.tags.some(item => item === this.currentValue)
+                if (!exist) {
+                    this.tags.push(this.currentValue)
+                    this.currentValue = '';
                     this.$emit('onTagsChange', this.tags);
                 }
             }
         },
         deleteTag(tag) {
             this.tags = this.tags.filter((item) => item !== tag);
-            // this.tags es igual a this.tags.filter, item donde item no sea igual a tag
-            // filter = filtra la array tags y le indica que el item no sea igual a un tag
-            // regresará todas las etiquetas que sean diferentes al parametro tag
             this.$emit('onTagsChange', this.tags);
         }
     }
