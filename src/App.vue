@@ -1,6 +1,6 @@
 <template>
 
-<InputTag @onTagsChange="handleOnTagsChange" />
+  <InputTag @onTagsChange="handleOnTagsChange" />
 
 </template>
 
@@ -9,12 +9,12 @@
 
 import InputTag from "./components/InputTag.vue"
 
-export default{
+export default {
   components: {
     InputTag,
   },
-  methods:{
-    handleOnTagsChange(tag){
+  methods: {
+    handleOnTagsChange(tag) {
       console.log(tag)
     }
   }
@@ -25,8 +25,5 @@ export default{
 
 
 <style scoped>
-
-
-
 
 </style>
